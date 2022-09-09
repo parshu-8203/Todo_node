@@ -1,0 +1,35 @@
+<%- include('header') -%>
+<div class="box" id="heading">
+    <h1>
+        <%=kindOfDate %>
+    </h1>
+</div>
+
+
+<div class="box">
+
+    <!-- <% for(let i=0;i<item.length;i++) { %>
+        <div class="item">
+            <input type="checkbox">
+            <p>
+                <%= item[i].name %>
+            </p>
+        </div>
+        <% } %> -->
+        <% item.forEach(function(task) { %>
+            <form action="/delete" method="post">
+            <div class="item">
+                <input type="checkbox" name="checkBox" value="<%= task._id %>" onChange="this.form.submit()">
+                <p>
+                    <%= task.name %>
+                </p>
+                <input type="hidden" name="currList" value="<%= kindOfDate %>">
+            </div>
+        </form>
+        <% }) %>
+            <form class="item" action="/" method="post">
+                <input type="text" name="task" autocomplete="off" placeholder="New item">
+                <button type="submit" name="button" value=<%=kindOfDate%> >+</button>
+            </form>
+</div>
+<%- include('footer') -%>
