@@ -67,6 +67,10 @@ button {
   border-width: 0;
 }
 
+
+button:hover {
+  cursor: pointer;
+}
 input[type="text"] {
   text-align: center;
   height: 30px;

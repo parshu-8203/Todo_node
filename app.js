@@ -1,16 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const date = require(__dirname+"/date.js");
 const mongoose = require('mongoose');
-const e = require('express');
 const _ = require('lodash');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
-let Tasks = [];
-let newList = [];
+
+//mongoose connection
 mongoose.connect("mongodb+srv://admin-parshu:Test123@cluster0.dbr2pzl.mongodb.net/todoDB", { useNewUrlParser: true });
 
 const ItemSchema = new mongoose.Schema({
@@ -25,36 +23,11 @@ const ListSchema = new mongoose.Schema({
 });
 
 const List = mongoose.model("List", ListSchema);
-const item1 = new Item({
-    name: "Sleep for 8 hours"
-})
-const item2 = new Item({
-    name: "Drink 10L water regularly"
-})
-const item3 = new Item({
-    name: "No Junk Food"
-})
-const defaultList = [item1, item2, item3];
 
-// Item.insertMany([item1,item2,item3],function(err){
-//     if(err){
-//         console.log("Error in inserting items into DB");
-//     }
-//     else{
-//         console.log("Successfully Inserted Items");
-//     }
-// })
-
-// Item.find(function(err, items) {
-//     if(err) {
-//         console.log("Error occured in finding data");
-//     }
-//     else{
-//         items.forEach(function(task){
-//             Tasks.push(task.name);
-//         })
-//     }
-// })
+const welcome = new Item({
+    name: "Welcome to TODO"
+})
+const defaultList = [welcome];
 
 app.get("/", function (req, res) {
 
@@ -124,12 +97,12 @@ app.post("/delete", function (req, res) {
             }
         })
     }
-    else{
-        List.findOneAndUpdate({name:currList},
-            {$pull:{item:{_id:deleteId}}},
-            function(err){
-                if(!err){
-                    res.redirect("/"+currList);
+    else {
+        List.findOneAndUpdate({ name: currList },
+            { $pull: { item: { _id: deleteId } } },
+            function (err) {
+                if (!err) {
+                    res.redirect("/" + currList);
                 }
             })
     }
@@ -141,28 +114,32 @@ app.post("/", function (req, res) {
         name: task
     });
     if (which === "Today") {
+        if(task != "")
+        {
         I.save();
-        res.redirect("/");
+        }
+        setTimeout(function() {
+            res.redirect("/");
+        },1000);
     }
     else {
-        // Tasks.push(task);
-        // Item.insertOne({
-        //     name : task
-        // })
         List.findOne({ name: which }, function (err, foundList) {
-            if (!err) {
+            if (!err && task!="") {
                 foundList.item.push(I);
                 foundList.save();
-                res.redirect("/" + which);
             }
             else {
                 console.log("Error while inserting in different lists");
             }
+            setTimeout(function() {
+                res.redirect("/"+which);
+            },1000);
+
         });
     }
-}) 
+})
 let port = process.env.PORT;
-if(port == null || port == ""){
+if (port == null || port == "") {
     port = 3000;
 }
 

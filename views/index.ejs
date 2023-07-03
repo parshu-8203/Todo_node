@@ -1,4 +1,9 @@
 <%- include('header') -%>
+
+
+
+
+
 <div class="box" id="heading">
     <h1>
         <%=kindOfDate %>
@@ -6,16 +11,9 @@
 </div>
 
 
-<div class="box">
 
-    <!-- <% for(let i=0;i<item.length;i++) { %>
-        <div class="item">
-            <input type="checkbox">
-            <p>
-                <%= item[i].name %>
-            </p>
-        </div>
-        <% } %> -->
+<div class="box">
+      
         <% item.forEach(function(task) { %>
             <form action="/delete" method="post">
             <div class="item">
@@ -31,5 +29,6 @@
                 <input type="text" name="task" autocomplete="off" placeholder="New item">
                 <button type="submit" name="button" value=<%=kindOfDate%> >+</button>
             </form>
+            
 </div>
 <%- include('footer') -%>
